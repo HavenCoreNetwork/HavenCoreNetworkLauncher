@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: 'npm'
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -53,10 +54,17 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: Check out SRC Git repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'HavenCoreNetwork/Launcher'
+          token: ${{ secrets.ACCESS_TOKEN }}
+
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: 'npm'
           
       - name: Set up Python
         uses: actions/setup-python@v2
