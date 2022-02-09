@@ -4,11 +4,11 @@ on:
   repository_dispatch:
 
 jobs:
-  release-wiin-mac:
+  release-win:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [windows-latest]
     
     steps:
       - name: Check out Git repository
@@ -35,15 +35,59 @@ jobs:
         run: npm ci
         shell: bash
 
-      - name: Build
-        uses: nick-invision/retry@v2
-        env:
-          GH_TOKEN: ${{ secrets.github_token }}
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          timeout_minutes: 5
-          max_attempts: 3
-          shell: bash
-          command: npm run dist -- -p always
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: true
+          
+  release-mac:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+    
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Check out SRC Git repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'HavenCoreNetwork/Launcher'
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Dependencies
+        run: npm ci
+        shell: bash
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: true
+          
   release-lin:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -75,12 +119,13 @@ jobs:
         run: npm ci
         shell: bash
 
-      - name: Build
-        uses: nick-invision/retry@v2
-        env:
-          GH_TOKEN: ${{ secrets.github_token }}
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          timeout_minutes: 5
-          max_attempts: 3
-          shell: bash
-          command: npm run dist -- -p always
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: true
