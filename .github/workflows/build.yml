@@ -1,0 +1,98 @@
+name: Build/Release
+
+on: 
+  worfklow_dispatch:
+
+jobs:
+  
+  build-win:
+    runs-on: ${{ matrix.os }}
+   
+    strategy:
+      matrix: 
+        os: [windows-latest]
+    steps:
+     
+      - name: Check out Git repository
+        uses: actions/checkout@master
+        
+      - name: Check out Launcher repository
+        uses: actions/checkout@master
+        with:
+          repository: HavenCoreNetwork/Launcher
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+          
+      - run: npm install
+
+      - name: Build/release Electron app
+        run: npm run dist -- -p always
+        env:
+          GH_TOKEN: ${{secrets.ACCESS_TOKEN}}
+          
+  build-lin:
+    runs-on: ${{ matrix.os }}
+   
+    strategy:
+      matrix: 
+        os: [ubuntu-latest]
+    steps:
+     
+      - name: Check out Git repository
+        uses: actions/checkout@master
+        
+      - name: Check out Launcher repository
+        uses: actions/checkout@master
+        with:
+          repository: HavenCoreNetwork/Launcher
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+          
+      - run: npm install
+
+      - name: Build/release Electron app
+        run: npm run dist:lin -- -p always
+        env:
+          GH_TOKEN: ${{secrets.ACCESS_TOKEN}}
+          
+  build-mac:
+    runs-on: ${{ matrix.os }}
+   
+    strategy:
+      matrix: 
+        os: [macos-latest]
+    steps:
+     
+      - name: Check out Git repository
+        uses: actions/checkout@master
+        
+      - name: Check out Launcher repository
+        uses: actions/checkout@master
+        with:
+          repository: HavenCoreNetwork/Launcher
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+          
+      - run: npm install
+
+      - name: Build/release Electron app
+        run: npm run dist:mac -- -p always
+        env:
+          GH_TOKEN: ${{secrets.ACCESS_TOKEN}}
+    
+    
