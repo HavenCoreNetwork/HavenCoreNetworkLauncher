@@ -21,10 +21,9 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Set up Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v1
         with:
           node-version: 16
-          cache: 'npm'
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -35,16 +34,11 @@ jobs:
         run: npm ci
         shell: bash
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
-
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: true
+      - name: Build
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: npm run dist -- --release alawys
+        shell: bash
           
   release-mac:
     runs-on: ${{ matrix.os }}
