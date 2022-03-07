@@ -20,7 +20,7 @@
   * If you have an incompatible version of Java installed, we'll install the right one *for you*.
   * You do not need to have Java installed to run the launcher.
 <!--* 📰 News feed natively built into the launcher.-->
-* ⚙️ Intuitive settings management, including a Java control panel.
+* ⚙️ Intuitive settings management,  including a Java control panel.
 * Supports all of our servers.
   * Switch between server configurations with ease.
   * View the player count of the selected server.
