@@ -1,6 +1,7 @@
 name: Build/Release
 
-on: 
+on:
+  push:
   repository_dispatch:
 
 jobs:
